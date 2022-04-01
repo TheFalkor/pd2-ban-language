@@ -28,18 +28,17 @@ function BanLanguage:DetectLanguage(name, message)
 	local letterCount = 0
 	local blockedLetters = BanLanguage:BlockedLetters()
 
-	for letter in blockedLetters:gmatch"." do
-		if string.find(message, letter) then
+	for i = 1, #blockedLetters do
+		local c = blockedLetters:sub(i,i)
+		if string.find(message, c) then
 			letterCount = letterCount + 1
 
-			if letterCount > 2 then break
+			if letterCount > 2 then break end
 		end
 	end
 
 	if letterCount > 2 then
-		log("[BANL]]: \t Blocked letters were detected.")
-	else
-		log("[BANL]]: \t No detection.")
+		TryKickPlayer(name)
 	end
 end
 
@@ -61,6 +60,7 @@ function BanLanguage:TryKickPlayer(name)
 	if Network.is_server() then
 		managers.network:session():send_to_peers("kick_peer", sender_peer:id(), 2)
 		managers.network:session():on_peer_kicked(sender_peer, sender_peer:id(), 2)
+		log("[BANL]: \t" .. name .. " was kicked from the lobby")
 	end
 end
 
