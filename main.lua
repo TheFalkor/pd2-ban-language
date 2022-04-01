@@ -1,6 +1,6 @@
 _G.BanLanguage = _G.BanLanguage or {}
 
-function BanLanguage:Letters()
+function BanLanguage:BlockedLetters()
 	return "åäö"
 end
 
@@ -27,18 +27,44 @@ end
 
 
 function BanLanguage:DetectLanguage(name, message)
+	local letterCount = 0
+	local blockedLetters = BanLanguage:BlockedLetters()
+
+	for letter in blockedLetters:gmatch"." do
+		if string.find(message, letter) then
+			letterCount = letterCount + 1
+
+			if letterCount > 2 then break
+		end
+	end
+
+	if letterCount > 2 then
+		log("[BANL]]: \t it detected message? idk maybe")
+	else
+		log("[BANL]]: \t didnt detect?")
+	end
+end
+
+
+function BanLanguage:TryKickPlayer(name)
 	if not managers.network or not managers.network:session() then
-		log("[KR]: \t managers.network could not be found.")
+		log("[BANL]]: \t managers.network could not be found.")
 		return
 	end
 
 	local client_peer = managers.network:session():local_peer()
-	local sender_peer = managers.network:session():peer_by_name(name)
+	local sender_peer = managers.network:session():peer_by_name(name)	
 
-	if message == BanLanguage:Letters() then
-		log("[KR]: \t it detected message? idk maybe")
-	else
-		log("[KR]: \t didnt detect?")
+	if client_peer == sender_peer then
+		log("[BANL]: \t blocked letters detected in your own message.")
+		return
+	end
+
+	local 
+
+	if Network.is_server() then
+		managers.network:session():send_to_peers("kick_peer", sender_peer:id(), 2)
+		managers.network:session():on_peer_kicked(sender_peer, sender_peer:id(), 2)
 	end
 end
 
