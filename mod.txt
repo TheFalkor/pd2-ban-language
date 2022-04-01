@@ -1,0 +1,27 @@
+{
+  "name": "BanLanguage",
+  "description": "Kick players if they are typing with blocked symbols",
+  "author": "TheFalkor",
+  "contact": "https://github.com/thefalkor",
+  "version": "1",
+  "priority": 100,
+  "blt_version": 2,
+  "hooks": [
+    {
+      "hook_id": "lib/network/base/clientnetworksession",
+      "script_path": "main.lua"
+    },
+    {
+      "hook_id": "lib/network/base/hostnetworksession",
+      "script_path": "main.lua"
+    },
+    {
+      "hook_id": "lib/network/base/networkpeer",
+      "script_path": "main.lua"
+    },
+    {
+      "hook_id": "lib/managers/chatmanager",
+      "script_path": "main.lua"
+    }
+  ]
+}
