@@ -4,6 +4,10 @@ function BanLanguage:BlockedLetters()
 	return "åäö"
 end
 
+function BanLanguage:MaxAllowedLetters()
+	return 2
+end
+
 
 function BanLanguage:Setup()
 	BanLanguage:SetupHooks()
@@ -33,12 +37,12 @@ function BanLanguage:DetectLanguage(name, message)
 		if string.find(message, c) then
 			letterCount = letterCount + 1
 
-			if letterCount > 2 then break end
+			if letterCount > BanLanguage:MaxAllowedLetters() then break end
 		end
 	end
 
-	if letterCount > 2 then
-		TryKickPlayer(name)
+	if letterCount > BanLanguage:MaxAllowedLetters() then
+		BanLanguage:TryKickPlayer(name)
 	end
 end
 
