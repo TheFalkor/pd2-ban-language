@@ -20,9 +20,7 @@ function BanLanguage:SetupHooks()
 				BanLanguage:DetectLanguage(name, message)
 			end
 		)
-
 	end
-
 end
 
 
@@ -39,16 +37,16 @@ function BanLanguage:DetectLanguage(name, message)
 	end
 
 	if letterCount > 2 then
-		log("[BANL]]: \t it detected message? idk maybe")
+		log("[BANL]]: \t Blocked letters were detected.")
 	else
-		log("[BANL]]: \t didnt detect?")
+		log("[BANL]]: \t No detection.")
 	end
 end
 
 
 function BanLanguage:TryKickPlayer(name)
 	if not managers.network or not managers.network:session() then
-		log("[BANL]]: \t managers.network could not be found.")
+		log("[BANL]]: \t Network or Session could not be found.")
 		return
 	end
 
@@ -56,11 +54,9 @@ function BanLanguage:TryKickPlayer(name)
 	local sender_peer = managers.network:session():peer_by_name(name)	
 
 	if client_peer == sender_peer then
-		log("[BANL]: \t blocked letters detected in your own message.")
+		log("[BANL]: \t Detection was triggered by you.")
 		return
 	end
-
-	local 
 
 	if Network.is_server() then
 		managers.network:session():send_to_peers("kick_peer", sender_peer:id(), 2)
