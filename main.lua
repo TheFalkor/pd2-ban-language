@@ -4,10 +4,6 @@ function BanLanguage:BlockedLetters()
 	return "åäö"
 end
 
-function BanLanguage:MaxAllowedLetters()
-	return 2
-end
-
 
 function BanLanguage:Setup()
 	BanLanguage:SetupHooks()
@@ -32,16 +28,14 @@ function BanLanguage:DetectLanguage(name, message)
 	local letterCount = 0
 	local blockedLetters = BanLanguage:BlockedLetters()
 
-	for i = 1, #blockedLetters do
-		local c = blockedLetters:sub(i,i)
-		if string.find(message, c) then
+	for letter in blockedLetters:gmatch"." do
+		if string.find(message, letter) then
 			letterCount = letterCount + 1
-
-			if letterCount > BanLanguage:MaxAllowedLetters() then break end
+			if letterCount > 1 then break end
 		end
 	end
 
-	if letterCount > BanLanguage:MaxAllowedLetters() then
+	if letterCount > 1 then
 		BanLanguage:TryKickPlayer(name)
 	end
 end
@@ -49,7 +43,7 @@ end
 
 function BanLanguage:TryKickPlayer(name)
 	if not managers.network or not managers.network:session() then
-		log("[BANL]]: \t Network or Session could not be found.")
+		log("[BANL]: \t Network or Session could not be found.")
 		return
 	end
 
